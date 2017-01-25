@@ -1,0 +1,9 @@
+---
+applications:
+- name: PySpark-App
+  buildpack: https://github.com/andreasf/python-buildpack#spark
+  random-route: true
+  memory: 2GB
+  disk_quota: 2GB
+  command: spark-submit spark-app.py
+
