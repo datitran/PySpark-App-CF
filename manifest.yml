@@ -5,5 +5,5 @@ applications:
   random-route: true
   memory: 2GB
   disk_quota: 2GB
-  command: spark-submit spark-app.py
+  command: spark-submit spark_app.py
 
