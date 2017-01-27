@@ -1,13 +1,19 @@
 import os
 import sys
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from pyspark import SparkConf
 from pyspark.sql import SparkSession
 from pyspark.ml.regression import LinearRegression, LinearRegressionModel
 from pyspark.ml.linalg import Vectors
 
 app = Flask(__name__)
-spark_session = SparkSession.builder.getOrCreate()
-sc = spark_session.sparkContext
+
+conf = SparkConf()
+conf.set("spark.executor.memory", "256mb")
+conf.set("spark.cores.max", "1")
+
+spark_session = SparkSession.builder.config(conf=conf).getOrCreate()
+spark_context = spark_session.sparkContext
 
 
 def get_port():
@@ -19,19 +25,25 @@ def get_port():
 
 @app.route("/")
 def test_spark_context():
-    data = sc.parallelize(range(10))
+    data = spark_context.parallelize(range(10))
     return str(data.collect())
 
 
 @app.route("/predict")
-def prediction():
+def predict():
     """
-    http://uri_cfapps.pez.pivotal.io/predict?value=0
+    https://app.host/predict?value=0
     """
     value = int(request.args.get("value"))
     model_load = LinearRegressionModel.load("model")
     predict_df = spark_session.createDataFrame([(1, Vectors.dense(value))], ["index", "features"])
-    return str(model_load.transform(predict_df).collect()[0])
+
+    predict_collected = model_load.transform(predict_df).collect()[0]
+
+    features = predict_collected.features.values.tolist()
+    prediction = predict_collected.prediction
+    output = {"features": features, "prediction": prediction}
+    return jsonify(output)
 
 
 @app.route("/version")
