@@ -1,6 +1,6 @@
 # PySpark-App-CF
 
-A simple example which uses the [PySpark buildpack](https://github.com/andreasf/pyspark-buildpack/tree/spark) to deploy an [Apache Spark](http://spark.apache.org/) application, particularly using its Python API, on Cloud Foundry.
+A simple example which uses the [PySpark buildpack](https://github.com/andreasf/pyspark-buildpack) to deploy an [Apache Spark](http://spark.apache.org/) application, particularly using its Python API, on Cloud Foundry.
 
 ## Getting Started
 
