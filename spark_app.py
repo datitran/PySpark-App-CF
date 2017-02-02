@@ -3,17 +3,19 @@ import sys
 from flask import Flask, request, jsonify
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
-from pyspark.ml.regression import LinearRegression, LinearRegressionModel
+from pyspark.ml.regression import LinearRegressionModel
 from pyspark.ml.linalg import Vectors
 
 app = Flask(__name__)
 
-conf = SparkConf()
-conf.set("spark.executor.memory", "256mb")
-conf.set("spark.cores.max", "1")
 
-spark_session = SparkSession.builder.config(conf=conf).getOrCreate()
-spark_context = spark_session.sparkContext
+def create_spark_connection():
+    conf = SparkConf()
+    conf.set("spark.executor.memory", "512mb")
+    conf.set("spark.cores.max", "1")
+    spark_session = SparkSession.builder.config(conf=conf).getOrCreate()
+    spark_context = spark_session.sparkContext
+    return spark_session, spark_context
 
 
 def get_port():
@@ -25,16 +27,18 @@ def get_port():
 
 @app.route("/")
 def test_spark_context():
+    _, spark_context = create_spark_connection()
     data = spark_context.parallelize(range(10))
     return str(data.collect())
 
 
-@app.route("/predict")
+@app.route("/predict", methods=["GET"])
 def predict():
     """
     https://app.host/predict?value=0
     """
     value = int(request.args.get("value"))
+    spark_session, _ = create_spark_connection()
     model_load = LinearRegressionModel.load("model")
     predict_df = spark_session.createDataFrame([(1, Vectors.dense(value))], ["index", "features"])
 

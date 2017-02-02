@@ -6,6 +6,12 @@ A simple example which uses the [PySpark buildpack](https://github.com/andreasf/
 
 - Use `cf push` to deploy the application
 
+### Testing
+A local `apache-spark` instance and `nosetests` need to be installed before running the tests. For more information see [here](https://github.com/datitran/spark-tdd-example).
+
+- Run tests with: `nosetests -vs tests/`
+
+
 ## Dependencies
 - [Apache Spark 2.1.0](http://spark.apache.org/)
 - OpenJDK 1.8.0_91
