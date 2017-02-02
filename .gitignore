@@ -98,3 +98,4 @@ ENV/
 
 # Custom
 .idea/
+model/

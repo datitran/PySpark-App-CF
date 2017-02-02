@@ -23,13 +23,21 @@ def convert_to_df(spark_session, input_data):
                                         ), ["label", "weight", "features"])
     return df
 
+
 def fit_model(df):
     lr = LinearRegression(maxIter=5, regParam=0.0, solver="normal", weightCol="weight")
     model = lr.fit(df)
     return model
 
+
 def save_model(model):
     model.write().overwrite().save("model")
 
+
 if __name__ == "__main__":
     spark_session = SparkSession.builder.getOrCreate()
+
+    input_data = generate_data()
+    df = convert_to_df(spark_session, input_data)
+    model = fit_model(df)
+    save_model(model)
