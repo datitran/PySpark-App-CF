@@ -1,6 +1,6 @@
 ---
 applications:
-- name: PySpark-App
+- name: PySpark-App-Testing
   buildpack: https://github.com/andreasf/python-buildpack#spark
   random-route: true
   memory: 768mb

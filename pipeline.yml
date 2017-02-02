@@ -1,0 +1,77 @@
+---
+resources:
+- name: pyspark-app-ci
+  type: git
+  source:
+    uri: git@github.com:datitran/PySpark-App-CF.git
+    branch: master
+    private_key: {{private-key}}
+
+- name: pws
+  type: cf
+  source:
+    api: {{cf-api}}
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: {{cf-organization}}
+    space: {{cf-space}}
+    skip_cert_check: false
+
+jobs:
+- name: test-pyspark-model-training
+  plan:
+  - get: pyspark-app-ci
+    trigger: true
+
+  - task: test-model-training
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+            repository: ubuntu
+      inputs:
+        - name: pyspark-app-ci
+      run:
+        path: echo
+        args: ["Hello, world!"]
+
+- name: test-pyspark-app-api
+  plan:
+  - get: pyspark-app-ci
+    trigger: true
+    passed: [test-pyspark-model-training]
+
+  - task: test-pyspark-app
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+            repository: ubuntu
+      inputs:
+        - name: pyspark-app-ci
+      run:
+        path: echo
+        args: ["Hello, world!"]
+
+- name: deploy-pyspark-app-testing
+  plan:
+    - get: pyspark-app-ci
+      trigger: true
+      passed: [test-pyspark-app-api]
+    - put: pws
+      params:
+        manifest: pyspark-app-ci/manifest_testing.yml
+        path: pyspark-app-ci/
+
+- name: deploy-pyspark-app-production
+  plan:
+    - get: pyspark-app-ci
+      trigger: false
+      passed: [test-pyspark-app-api]
+    - put: pws
+      params:
+        manifest: pyspark-app-ci/manifest_production.yml
+        path: pyspark-app-ci/
+
