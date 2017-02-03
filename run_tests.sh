@@ -7,15 +7,13 @@ set -e
 
 echo "Hello World"
 
-apt-get install sudo
-
-sudo apt-get update
-sudo apt-get -y install wget curl software-properties-common
+apt-get update
+apt-get -y install wget curl software-properties-common
 
 # install openjdk
-sudo add-apt-repository -y ppa:openjdk-r/ppa
-sudo apt-get update
-sudo apt-get -y install openjdk-8-jdk
+add-apt-repository -y ppa:openjdk-r/ppa
+apt-get update
+apt-get -y install openjdk-8-jdk
 
 # Install Miniconda
 wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh \
