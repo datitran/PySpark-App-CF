@@ -26,7 +26,7 @@ echo -e '\nexport PATH=$HOME/conda/bin:$PATH' >> $HOME/.bashrc && source $HOME/.
 cat $HOME/.bashrc
 
 # install Packages
-conda install -y nose numpy pandas
+$HOME/conda/bin/conda install -y nose numpy pandas
 
 # Install Spark
 curl $SPARK_URL > $HOME/$SPARK_FILENAME
