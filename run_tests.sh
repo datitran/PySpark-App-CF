@@ -19,7 +19,11 @@ apt-get -y install openjdk-8-jdk
 wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh \
     && /bin/bash ~/miniconda.sh -b -p $HOME/conda
 
+cat $HOME/.bashrc
+
 echo -e '\nexport PATH=$HOME/conda/bin:$PATH' >> $HOME/.bashrc && source $HOME/.bashrc
+
+cat $HOME/.bashrc
 
 # install Packages
 conda install -y nose numpy pandas
