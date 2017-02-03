@@ -7,6 +7,8 @@ set -e
 
 echo "Hello World"
 
+apt-get install sudo
+
 sudo apt-get update
 sudo apt-get -y install wget curl software-properties-common
 
