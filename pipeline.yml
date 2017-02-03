@@ -30,11 +30,11 @@ jobs:
         type: docker-image
         source:
             repository: ubuntu
+            tag: latest
       inputs:
         - name: pyspark-app-ci
       run:
-        path: echo
-        args: ["Hello, world!"]
+        path: pyspark-app-ci/run_tests.sh
 
 - name: test-pyspark-app-api
   plan:
@@ -49,6 +49,7 @@ jobs:
         type: docker-image
         source:
             repository: ubuntu
+            tag: latest
       inputs:
         - name: pyspark-app-ci
       run:
@@ -74,4 +75,3 @@ jobs:
       params:
         manifest: pyspark-app-ci/manifest_production.yml
         path: pyspark-app-ci/
-
