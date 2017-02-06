@@ -56,6 +56,7 @@ echo "Install Miniconda"
 
 install_spark() {
 echo "Install Spark"
+    mkdir $SPARK_FOLDER
     SPARK_URL=$(get_setting SPARK_URL)
     SPARK_FILENAME=$(get_setting SPARK_FILENAME)
     curl $SPARK_URL > $HOME/$SPARK_FILENAME
