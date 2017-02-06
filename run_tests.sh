@@ -7,8 +7,14 @@ SPARK_URL=http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz
 SPARK_FILENAME=spark-2.1.0-bin-hadoop2.7.tgz
 SPARK_FOLDER=$HOME/spark
 
+JDK_URL=https://java-buildpack.cloudfoundry.org/openjdk/trusty/x86_64/openjdk-1.8.0_91.tar.gz
+JDK_FILENAME=openjdk-1.8.0_91.tar.gz
+JDK_FOLDER=$HOME/java
+
 main () {
     test=$1
+
+    install_base
 
     install_jdk
 
@@ -37,14 +43,21 @@ get_setting() {
     echo $(eval "echo \$$key")
 }
 
+install_base() {
+echo "Install base software"
+apt-get update && \
+    apt-get -y install wget curl software-properties-common bzip2
+}
+
 install_jdk() {
 echo "Install OpenJDK"
-apt-get update && \
-    apt-get -y install wget curl software-properties-common bzip2 && \
-    # install openjdk
-    add-apt-repository -y ppa:openjdk-r/ppa && \
-    apt-get update && \
-    apt-get -y install openjdk-8-jdk
+    mkdir $JDK_FOLDER
+    JDK_URL=$(get_setting JDK_URL)
+    JDK_FILENAME=$(get_setting JDK_FILENAME)
+    curl $JDK_URL > $HOME/$JDK_FILENAME
+    tar -xzf $HOME/$JDK_FILENAME --directory $JDK_FOLDER --strip-components 1
+    rm $HOME/$JDK_FILENAME
+    export JAVA_HOME="$JDK_FOLDER"
 }
 
 install_conda() {
@@ -53,7 +66,7 @@ echo "Install Miniconda"
     bash ~/miniconda.sh -b -p /home/conda
     rm ~/miniconda.sh
     export PATH="/home/conda/bin:$PATH"
-    conda install -y nose numpy pandas
+    conda install -y nose numpy pandas flask
 }
 
 install_spark() {
@@ -63,6 +76,7 @@ echo "Install Spark"
     SPARK_FILENAME=$(get_setting SPARK_FILENAME)
     curl $SPARK_URL > $HOME/$SPARK_FILENAME
     tar -xzf $HOME/$SPARK_FILENAME --directory $SPARK_FOLDER --strip-components 1
+    rm $HOME/$SPARK_FILENAME
     export SPARK_HOME="$SPARK_FOLDER"
 }
 
