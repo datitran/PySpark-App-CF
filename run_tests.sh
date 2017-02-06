@@ -15,18 +15,12 @@ add-apt-repository -y ppa:openjdk-r/ppa
 apt-get update
 apt-get -y install openjdk-8-jdk
 
-# Install Miniconda
-wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh \
-    && /bin/bash ~/miniconda.sh -b -p $HOME/conda
-
-cat $HOME/.bashrc
-
-echo -e '\nexport PATH=$HOME/conda/bin:$PATH' >> $HOME/.bashrc && source $HOME/.bashrc
-
-cat $HOME/.bashrc
-
-# install Packages
-$HOME/conda/bin/conda install -y nose numpy pandas
+echo "Install miniconda"
+    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh -O ~/miniconda.sh
+    bash ~/miniconda.sh -b -p /home/conda
+    rm ~/miniconda.sh
+    export PATH="/home/conda/bin:$PATH"
+    conda install -y nose numpy pandas
 
 # Install Spark
 curl $SPARK_URL > $HOME/$SPARK_FILENAME
@@ -38,3 +32,5 @@ nosetests -vs pyspark-app-ci/tests/test_linear_regression.py
 
 # show folders
 find .
+
+exit 0
