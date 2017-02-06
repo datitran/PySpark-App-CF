@@ -5,6 +5,7 @@ set -ex
 SPARK_CONFIG_FILE="pyspark-app-ci/spark_runtime.txt"
 SPARK_URL=http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz
 SPARK_FILENAME=spark-2.1.0-bin-hadoop2.7.tgz
+SPARK_FOLDER=$HOME/spark
 
 main () {
     install_jdk
@@ -14,6 +15,8 @@ main () {
     install_spark
 
     nosetests -vs pyspark-app-ci/tests/test_linear_regression.py
+
+    exit 0
 }
 
 get_setting() {
@@ -56,8 +59,8 @@ echo "Install Spark"
     SPARK_URL=$(get_setting SPARK_URL)
     SPARK_FILENAME=$(get_setting SPARK_FILENAME)
     curl $SPARK_URL > $HOME/$SPARK_FILENAME
-    tar -xzf $HOME/$SPARK_FILENAME -C $HOME/
-    export SPARK_HOME="$HOME/spark-2.1.0-bin-hadoop2.7/"
+    tar -xzf $HOME/$SPARK_FILENAME --directory $SPARK_FOLDER --strip-components 1
+    export SPARK_HOME="$SPARK_FOLDER"
 }
 
 main $*
