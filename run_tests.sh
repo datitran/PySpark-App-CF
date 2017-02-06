@@ -8,13 +8,15 @@ SPARK_FILENAME=spark-2.1.0-bin-hadoop2.7.tgz
 SPARK_FOLDER=$HOME/spark
 
 main () {
+    test=$1
+
     install_jdk
 
     install_conda
 
     install_spark
 
-    nosetests -vs pyspark-app-ci/tests/test_linear_regression.py
+    nosetests -vs $test
 
     exit 0
 }
