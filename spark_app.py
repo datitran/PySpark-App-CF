@@ -39,7 +39,8 @@ def predict():
     """
     value = int(request.args.get("value"))
     spark_session, _ = create_spark_connection()
-    model_load = LinearRegressionModel.load("model")
+    model_load = LinearRegressionModel.load(os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), "model"))
     predict_df = spark_session.createDataFrame([(1, Vectors.dense(value))], ["index", "features"])
 
     predict_collected = model_load.transform(predict_df).collect()[0]

@@ -35,6 +35,7 @@ jobs:
         - name: pyspark-app-ci
       run:
         path: pyspark-app-ci/run_tests.sh
+        args: ["pyspark-app-ci/tests/test_linear_regression.py"]
 
 - name: test-pyspark-app-api
   plan:
@@ -53,8 +54,8 @@ jobs:
       inputs:
         - name: pyspark-app-ci
       run:
-        path: echo
-        args: ["Hello, world!"]
+        path: pyspark-app-ci/run_tests.sh
+        args: ["pyspark-app-ci/tests/test_spark_app.py"]
 
 - name: deploy-pyspark-app-testing
   plan:

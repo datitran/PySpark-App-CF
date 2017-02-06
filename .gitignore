@@ -98,7 +98,7 @@ ENV/
 
 # Custom
 .idea/
-model/
 credentials.yml
 keys
 .vagrant/
+Vagrantfile

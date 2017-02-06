@@ -11,6 +11,14 @@ A local `apache-spark` instance and `nosetests` need to be installed before runn
 
 - Run tests with: `nosetests -vs tests/`
 
+### CI/CD
+[Concourse](https://concourse.ci/) is used as our CI tool due to its seamless integration with Cloud Foundry. The fastest way to use Concourse is with [Vagrant](https://www.vagrantup.com/):
+ 
+- Install Vagrant and run `vagrant init concourse/lite && vagrant up`
+- Connect to the CI: `fly -t pyspark-app-cf login -c http://192.168.100.4:8080`
+- Fill in the credential details in `credentials.yml.example` and rename the file to `credentials.yml`
+- Register the pipeline: `fly -t pyspark-app-cf set-pipeline -p pyspark-app-ci -c pipeline.yml -l credentials.yml`
+- Unpause the pipeline: `fly -t pyspark-app-cf unpause-pipeline -p pyspark-app-ci`
 
 ## Dependencies
 - [Apache Spark 2.1.0](http://spark.apache.org/)
